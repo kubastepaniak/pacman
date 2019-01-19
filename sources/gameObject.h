@@ -5,5 +5,5 @@
 class GameObject : public QGraphicsObject, public GameLogicObject {
     Q_OBJECT
 public:
-    GameObject(Map* map = nullptr);
+    GameObject(Map* map = nullptr) : GameLogicObject(map) { };
 };

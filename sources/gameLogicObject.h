@@ -6,5 +6,5 @@
 class GameLogicObject {
 public:
     Map *gameMap;
-    GameLogicObject(Map* map);
+    GameLogicObject(Map* map) { this->gameMap = map; };
 };

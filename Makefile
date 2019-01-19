@@ -55,11 +55,7 @@ SOURCES       = candy.cpp \
 		point.cpp \
 		rect.cpp \
 		scene.cpp \
-		scoreText.cpp \
-		sources/collectable.cpp \
-		sources/dynamicObject.cpp \
-		sources/gameLogicObject.cpp \
-		sources/gameObject.cpp moc_candy.cpp \
+		scoreText.cpp moc_candy.cpp \
 		moc_player.cpp \
 		moc_point.cpp \
 		moc_rect.cpp \
@@ -76,10 +72,6 @@ OBJECTS       = candy.o \
 		rect.o \
 		scene.o \
 		scoreText.o \
-		collectable.o \
-		dynamicObject.o \
-		gameLogicObject.o \
-		gameObject.o \
 		moc_candy.o \
 		moc_player.o \
 		moc_point.o \
@@ -164,11 +156,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		point.cpp \
 		rect.cpp \
 		scene.cpp \
-		scoreText.cpp \
-		sources/collectable.cpp \
-		sources/dynamicObject.cpp \
-		sources/gameLogicObject.cpp \
-		sources/gameObject.cpp
+		scoreText.cpp
 QMAKE_TARGET  = pacman
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = pacman
@@ -337,7 +325,7 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents candy.h map.h player.h point.h rect.h scene.h scoreText.h sources/collectable.h sources/dynamicObject.h sources/gameLogicObject.h sources/gameObject.h sources/staticObject.h $(DISTDIR)/
-	$(COPY_FILE) --parents candy.cpp map.cpp pacman.cpp player.cpp point.cpp rect.cpp scene.cpp scoreText.cpp sources/collectable.cpp sources/dynamicObject.cpp sources/gameLogicObject.cpp sources/gameObject.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents candy.cpp map.cpp pacman.cpp player.cpp point.cpp rect.cpp scene.cpp scoreText.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -491,25 +479,6 @@ scene.o: scene.cpp rect.h \
 
 scoreText.o: scoreText.cpp scoreText.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o scoreText.o scoreText.cpp
-
-collectable.o: sources/collectable.cpp sources/collectable.h \
-		sources/staticObject.h \
-		sources/gameObject.h \
-		sources/gameLogicObject.h \
-		map.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o collectable.o sources/collectable.cpp
-
-dynamicObject.o: sources/dynamicObject.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o dynamicObject.o sources/dynamicObject.cpp
-
-gameLogicObject.o: sources/gameLogicObject.cpp sources/gameLogicObject.h \
-		map.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gameLogicObject.o sources/gameLogicObject.cpp
-
-gameObject.o: sources/gameObject.cpp sources/gameObject.h \
-		sources/gameLogicObject.h \
-		map.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gameObject.o sources/gameObject.cpp
 
 moc_candy.o: moc_candy.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_candy.o moc_candy.cpp

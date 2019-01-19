@@ -8,6 +8,11 @@ private:
     enum Values { point = 1, candy = 3 };
 public:
     const static int bgSize = TILESIZE;
-    Collectable(int x, int y, int type);
-    int getValue();
+
+    Collectable(int x, int y, int type) : StaticObject(x, y) {
+        if(type == CollTag::point) points = Values::point;
+        else if(type == CollTag::candy) points = Values::candy;
+    }
+    
+    int getValue() { return points; }
 };
