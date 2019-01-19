@@ -14,6 +14,6 @@ void ScoreText::display() {
 }
 
 void ScoreText::pointEaten(int value) {
-    score += value;
+    score += (value - 5);
     display();
 }

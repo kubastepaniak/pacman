@@ -2,6 +2,7 @@
 #include "scene.h"
 #include "scoreText.h"
 #include "point.h"
+#include "candy.h"
 
 Scene::Scene() {
     gameMap = new Map;
@@ -11,9 +12,10 @@ Scene::Scene() {
         for (int y = 0; y < gameMap->getHeight(); y++) {
             this->addItem(new Rect(x, y, gameMap));
 
-            if((*collectablesMap)(x, y) == CollTag::point ||
-               (*collectablesMap)(x, y) == CollTag::candy) {
+            if((*collectablesMap)(x, y) == CollTag::point) {
                 this->addItem(new Point(x, y, (*collectablesMap)(x, y)));
+            } else if ((*collectablesMap)(x, y) == CollTag::candy) {
+                this->addItem(new Candy(x, y, (*collectablesMap)(x, y)));
             }
         }
     }

@@ -48,7 +48,8 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = map.cpp \
+SOURCES       = candy.cpp \
+		map.cpp \
 		pacman.cpp \
 		player.cpp \
 		point.cpp \
@@ -58,7 +59,8 @@ SOURCES       = map.cpp \
 		sources/collectable.cpp \
 		sources/dynamicObject.cpp \
 		sources/gameLogicObject.cpp \
-		sources/gameObject.cpp moc_player.cpp \
+		sources/gameObject.cpp moc_candy.cpp \
+		moc_player.cpp \
 		moc_point.cpp \
 		moc_rect.cpp \
 		moc_scoreText.cpp \
@@ -66,7 +68,8 @@ SOURCES       = map.cpp \
 		moc_dynamicObject.cpp \
 		moc_gameObject.cpp \
 		moc_staticObject.cpp
-OBJECTS       = map.o \
+OBJECTS       = candy.o \
+		map.o \
 		pacman.o \
 		player.o \
 		point.o \
@@ -77,6 +80,7 @@ OBJECTS       = map.o \
 		dynamicObject.o \
 		gameLogicObject.o \
 		gameObject.o \
+		moc_candy.o \
 		moc_player.o \
 		moc_point.o \
 		moc_rect.o \
@@ -142,7 +146,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		pacman.pro map.h \
+		pacman.pro candy.h \
+		map.h \
 		player.h \
 		point.h \
 		rect.h \
@@ -152,7 +157,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		sources/dynamicObject.h \
 		sources/gameLogicObject.h \
 		sources/gameObject.h \
-		sources/staticObject.h map.cpp \
+		sources/staticObject.h candy.cpp \
+		map.cpp \
 		pacman.cpp \
 		player.cpp \
 		point.cpp \
@@ -330,8 +336,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents map.h player.h point.h rect.h scene.h scoreText.h sources/collectable.h sources/dynamicObject.h sources/gameLogicObject.h sources/gameObject.h sources/staticObject.h $(DISTDIR)/
-	$(COPY_FILE) --parents map.cpp pacman.cpp player.cpp point.cpp rect.cpp scene.cpp scoreText.cpp sources/collectable.cpp sources/dynamicObject.cpp sources/gameLogicObject.cpp sources/gameObject.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents candy.h map.h player.h point.h rect.h scene.h scoreText.h sources/collectable.h sources/dynamicObject.h sources/gameLogicObject.h sources/gameObject.h sources/staticObject.h $(DISTDIR)/
+	$(COPY_FILE) --parents candy.cpp map.cpp pacman.cpp player.cpp point.cpp rect.cpp scene.cpp scoreText.cpp sources/collectable.cpp sources/dynamicObject.cpp sources/gameLogicObject.cpp sources/gameObject.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -354,9 +360,17 @@ check: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: moc_player.cpp moc_point.cpp moc_rect.cpp moc_scoreText.cpp moc_collectable.cpp moc_dynamicObject.cpp moc_gameObject.cpp moc_staticObject.cpp
+compiler_moc_header_make_all: moc_candy.cpp moc_player.cpp moc_point.cpp moc_rect.cpp moc_scoreText.cpp moc_collectable.cpp moc_dynamicObject.cpp moc_gameObject.cpp moc_staticObject.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_player.cpp moc_point.cpp moc_rect.cpp moc_scoreText.cpp moc_collectable.cpp moc_dynamicObject.cpp moc_gameObject.cpp moc_staticObject.cpp
+	-$(DEL_FILE) moc_candy.cpp moc_player.cpp moc_point.cpp moc_rect.cpp moc_scoreText.cpp moc_collectable.cpp moc_dynamicObject.cpp moc_gameObject.cpp moc_staticObject.cpp
+moc_candy.cpp: sources/collectable.h \
+		sources/staticObject.h \
+		sources/gameObject.h \
+		sources/gameLogicObject.h \
+		map.h \
+		candy.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/feyron/Desktop/oopc/qt/pacman -I/home/feyron/Desktop/oopc/qt/pacman -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include candy.h -o moc_candy.cpp
+
 moc_player.cpp: sources/dynamicObject.h \
 		sources/gameObject.h \
 		sources/gameLogicObject.h \
@@ -420,11 +434,23 @@ compiler_clean: compiler_moc_header_clean
 
 ####### Compile
 
+candy.o: candy.cpp candy.h \
+		sources/collectable.h \
+		sources/staticObject.h \
+		sources/gameObject.h \
+		sources/gameLogicObject.h \
+		map.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o candy.o candy.cpp
+
 map.o: map.cpp map.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o map.o map.cpp
 
 pacman.o: pacman.cpp scene.h \
-		map.h
+		map.h \
+		player.h \
+		sources/dynamicObject.h \
+		sources/gameObject.h \
+		sources/gameLogicObject.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o pacman.o pacman.cpp
 
 player.o: player.cpp player.h \
@@ -454,12 +480,13 @@ scene.o: scene.cpp rect.h \
 		sources/gameObject.h \
 		sources/gameLogicObject.h \
 		map.h \
-		point.h \
-		sources/collectable.h \
 		scene.h \
 		player.h \
 		sources/dynamicObject.h \
-		scoreText.h
+		scoreText.h \
+		point.h \
+		sources/collectable.h \
+		candy.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o scene.o scene.cpp
 
 scoreText.o: scoreText.cpp scoreText.h
@@ -483,6 +510,9 @@ gameObject.o: sources/gameObject.cpp sources/gameObject.h \
 		sources/gameLogicObject.h \
 		map.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gameObject.o sources/gameObject.cpp
+
+moc_candy.o: moc_candy.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_candy.o moc_candy.cpp
 
 moc_player.o: moc_player.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_player.o moc_player.cpp

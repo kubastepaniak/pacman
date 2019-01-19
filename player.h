@@ -10,6 +10,13 @@
 
 class Player : public DynamicObject {
     Q_OBJECT
+
+protected:
+    bool moveUpPossible() override;
+    bool moveDownPossible() override;
+    bool moveLeftPossible() override;
+    bool moveRightPossible() override;
+
 private:
     Map *collectablesMap;
     enum DirectAngle { right = 0, left = 180 * 16, 
@@ -18,13 +25,9 @@ private:
     int startAngle = 0;
 
     void updateAngle(int direction);
-    bool moveUpPossible() override;
-    bool moveDownPossible() override;
-    bool moveLeftPossible() override;
-    bool moveRightPossible() override;
-
     void updateCoords();
     void checkCollectable();
+
 public:
     int xCoordinate;
     int yCoordinate;
@@ -32,6 +35,7 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
     QRectF boundingRect() const override;
     void keyPressEvent(QKeyEvent * event);
+    
 signals:
     void itemCollected(int value);
 };

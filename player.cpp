@@ -103,10 +103,10 @@ void Player::keyPressEvent(QKeyEvent * event) {
 void Player::checkCollectable() {
     if((*collectablesMap)(xPos, yPos) == CollTag::point) {
         (*collectablesMap)(xPos, yPos) = 0;
-        emit itemCollected(1);
+        emit itemCollected(CollTag::point);
     } else if((*collectablesMap)(xPos, yPos) == CollTag::candy) {
         (*collectablesMap)(xPos, yPos) = 0;
-        emit itemCollected(3);
+        emit itemCollected(CollTag::candy);
     }
 }
 

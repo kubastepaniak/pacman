@@ -2,7 +2,7 @@
 
 enum MapType : int { logic, collectable };
 enum MapTag : int { space, wall, gate, teleport };
-enum CollTag : int { point = 5, candy };
+enum CollTag : int { point = 6, candy = 8 };
 
 struct Map {
     int **map;
