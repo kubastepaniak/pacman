@@ -1,5 +1,6 @@
 #pragma once
 #include "sources/dynamicObject.h"
+#include <QTimer>
 #include <QPainter>
 #include <QWidget>
 #include <QStyleOptionGraphicsItem>
@@ -16,17 +17,22 @@ protected:
     bool moveDownPossible() override;
     bool moveLeftPossible() override;
     bool moveRightPossible() override;
+    void move(int direction) override;
 
 private:
+    QTimer *timer;
     Map *collectablesMap;
     enum DirectAngle { right = 0, left = 180 * 16, 
                        up = 90 * 16, down = -(90 * 16) };
     const static int angle = 60;
     int startAngle = 0;
+    int currentDirection;
+    int queuedDirection;
 
-    void updateAngle(int direction);
+    void updateDirection(int direction);
     void updateCoords();
     void checkCollectable();
+    bool moveInDirectionPossible(int direction);
 
 public:
     int xCoordinate;
@@ -36,6 +42,9 @@ public:
     QRectF boundingRect() const override;
     void keyPressEvent(QKeyEvent * event);
     
+public slots:
+    void updatePosition();
+
 signals:
     void itemCollected(int value);
 };

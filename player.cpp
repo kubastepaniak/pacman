@@ -1,4 +1,5 @@
 #include "player.h"
+#include <iostream>
 
 Player::Player(Map *cMap, Map *map)
     : DynamicObject(DEFAULT_X, DEFAULT_Y, map),
@@ -6,6 +7,11 @@ Player::Player(Map *cMap, Map *map)
       yCoordinate(DEFAULT_Y * TILESIZE) { 
     collectablesMap = cMap;
     this->setFlag(QGraphicsItem::ItemIsFocusable);
+
+    currentDirection = Direction::none;
+    timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(updatePosition()));
+    timer->start(250); 
 }
 
 void Player::paint(QPainter *painter, const QStyleOptionGraphicsItem * /*option*/, QWidget * /*widget*/) {
@@ -17,6 +23,12 @@ void Player::paint(QPainter *painter, const QStyleOptionGraphicsItem * /*option*
 
 QRectF Player::boundingRect() const {
     return QRectF(xCoordinate, yCoordinate, TILESIZE, TILESIZE);
+}
+
+void Player::updatePosition() {
+    if(moveInDirectionPossible(queuedDirection))
+        currentDirection = queuedDirection;
+    move(currentDirection);
 }
 
 bool Player::moveUpPossible() {
@@ -50,51 +62,71 @@ bool Player::moveLeftPossible() {
         return false;
 }
 
-void Player::updateAngle(int direction) {
-    if(direction) {
-        switch(direction) {
-            case Qt::Key_Right: {
-                startAngle = DirectAngle::right;
-                break;
+bool Player::moveInDirectionPossible(int direction) {
+    if (direction == Direction::left) {
+        if (moveLeftPossible())
+            return true;
+	} else if (direction == Direction::right) {
+        if (moveRightPossible())
+            return true;
+	} else if (direction == Direction::up) {
+        if (moveUpPossible())
+            return true;
+	} else if (direction == Direction::down) {
+        if (moveDownPossible())
+            return true;
+	}
+    return false;
+}
+
+void Player::updateDirection(int direction) {
+    switch(direction) {
+        case Direction::right: {
+            if((*gameMap)(xPos, yPos) == MapTag::teleport) {
+                xPos = TP_LEFT_X;
+            } else {
+                xPos++;
             }
-            case Qt::Key_Left: {
-                startAngle = DirectAngle::left;
-                break;
-            }
-            case Qt::Key_Up: {
-                startAngle = DirectAngle::up;
-                break;
-            }
-            case Qt::Key_Down: {
-                startAngle = DirectAngle::down;
-                break;
-            }
+            startAngle = DirectAngle::right;
+            break;
         }
+        case Direction::left: {
+            if((*gameMap)(xPos, yPos) == MapTag::teleport) {
+                xPos = TP_RIGHT_X;
+            } else {
+                xPos--;
+            }
+            startAngle = DirectAngle::left;
+            break;
+        }
+        case Direction::up: {
+            yPos--;
+            startAngle = DirectAngle::up;
+            break;
+        }
+        case Direction::down: {
+            yPos++;
+            startAngle = DirectAngle::down;
+            break;
+        }
+        default: break;
     }
 }
 
 void Player::keyPressEvent(QKeyEvent * event) {
-    if (event->key() == Qt::Key_Left) {
-        if (moveLeftPossible()) {
-            xPos--;
-            updateAngle(Qt::Key_Left);
-        }
-	} else if (event->key() == Qt::Key_Right) {
-        if (moveRightPossible()) {
-            xPos++;
-            updateAngle(Qt::Key_Right);
-        }
-	} else if (event->key() == Qt::Key_Up) {
-        if (moveUpPossible()) {
-            yPos--;
-            updateAngle(Qt::Key_Up);
-        }
-	} else if (event->key() == Qt::Key_Down) {
-        if (moveDownPossible()) {
-            yPos++;
-            updateAngle(Qt::Key_Down);
-        }
-	}
+    if (event->key() == Qt::Key_Right || event->key() == Qt::Key_Left ||
+        event->key() == Qt::Key_Down  || event->key() == Qt::Key_Up) {
+        if(currentDirection == Direction::none)
+            currentDirection = event->key();
+        else
+            queuedDirection = event->key();
+    }
+}
+
+void Player::move(int direction) {
+    if(moveInDirectionPossible(direction))
+        updateDirection(direction);
+
     prepareGeometryChange();
     updateCoords();
     checkCollectable();
