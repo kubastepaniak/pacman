@@ -11,7 +11,5 @@ protected:
     virtual bool moveLeftPossible() = 0;
     virtual bool moveRightPossible() = 0;
 public:
-/*     int xPos;
-    int yPos; */
     DynamicObject(int x, int y, Map *map = nullptr) :  GameObject(map), xPos(x), yPos(y) { }
 };

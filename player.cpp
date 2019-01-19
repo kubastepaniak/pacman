@@ -1,5 +1,4 @@
 #include "player.h"
-#include <iostream>
 
 Player::Player(Map *cMap, Map *map)
     : DynamicObject(DEFAULT_X, DEFAULT_Y, map),
@@ -98,7 +97,7 @@ void Player::keyPressEvent(QKeyEvent * event) {
 	}
     prepareGeometryChange();
     updateCoords();
-    //checkCollectable();
+    checkCollectable();
 }
 
 void Player::checkCollectable() {
