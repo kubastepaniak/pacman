@@ -32,7 +32,6 @@ private:
     void updateDirection(int direction);
     void updateCoords();
     void checkCollectable();
-    bool moveInDirectionPossible(int direction);
 
 public:
     int xCoordinate;

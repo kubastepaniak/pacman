@@ -62,23 +62,6 @@ bool Player::moveLeftPossible() {
         return false;
 }
 
-bool Player::moveInDirectionPossible(int direction) {
-    if (direction == Direction::left) {
-        if (moveLeftPossible())
-            return true;
-	} else if (direction == Direction::right) {
-        if (moveRightPossible())
-            return true;
-	} else if (direction == Direction::up) {
-        if (moveUpPossible())
-            return true;
-	} else if (direction == Direction::down) {
-        if (moveDownPossible())
-            return true;
-	}
-    return false;
-}
-
 void Player::updateDirection(int direction) {
     switch(direction) {
         case Direction::right: {
