@@ -12,17 +12,12 @@ Player::Player(Map *cMap, Map *map)
 void Player::paint(QPainter *painter, const QStyleOptionGraphicsItem * /*option*/, QWidget * /*widget*/) {
     painter->setPen(Qt::NoPen);
     painter->setBrush(Qt::yellow);
-    std::cout << "here ffs\n";
-    painter->drawPie(xPos * TILESIZE, yPos * TILESIZE, TILESIZE, TILESIZE,
+    painter->drawPie(xCoordinate, yCoordinate, TILESIZE, TILESIZE,
                      16 * (angle / 2) + startAngle, 16 * (360 - angle));
-    /* painter->drawPie(xCoordinate, yCoordinate, TILESIZE, TILESIZE,
-                     16 * (angle / 2) + startAngle, 16 * (360 - angle)); */
 }
 
 QRectF Player::boundingRect() const {
-    //return QRectF(xCoordinate, yCoordinate, TILESIZE, TILESIZE);
-    return QRectF(xPos * TILESIZE, yPos * TILESIZE, TILESIZE, TILESIZE);
-    //return QRectF(pos().x(), pos().y(), TILESIZE, TILESIZE);
+    return QRectF(xCoordinate, yCoordinate, TILESIZE, TILESIZE);
 }
 
 bool Player::moveUpPossible() {
@@ -56,26 +51,22 @@ bool Player::moveLeftPossible() {
         return false;
 }
 
-void Player::updateDirection(int direction) {
+void Player::updateAngle(int direction) {
     if(direction) {
         switch(direction) {
             case Qt::Key_Right: {
-                xPos++;
                 startAngle = DirectAngle::right;
                 break;
             }
             case Qt::Key_Left: {
-                xPos--;
                 startAngle = DirectAngle::left;
                 break;
             }
             case Qt::Key_Up: {
-                yPos--;
                 startAngle = DirectAngle::up;
                 break;
             }
             case Qt::Key_Down: {
-                yPos++;
                 startAngle = DirectAngle::down;
                 break;
             }
@@ -86,27 +77,26 @@ void Player::updateDirection(int direction) {
 void Player::keyPressEvent(QKeyEvent * event) {
     if (event->key() == Qt::Key_Left) {
         if (moveLeftPossible()) {
-            //setPos(x() - TILESIZE, y());
             xPos--;
-            //updateDirection(Qt::Key_Left);
-            //this->setStartAngle(16 * (angle / 2) + (180 * 16));
+            updateAngle(Qt::Key_Left);
         }
 	} else if (event->key() == Qt::Key_Right) {
         if (moveRightPossible()) {
-            setPos(x() + TILESIZE, y());
             xPos++;
+            updateAngle(Qt::Key_Right);
         }
 	} else if (event->key() == Qt::Key_Up) {
         if (moveUpPossible()) {
-            //setPos(x(), y() - TILESIZE);
             yPos--;
+            updateAngle(Qt::Key_Up);
         }
 	} else if (event->key() == Qt::Key_Down) {
         if (moveDownPossible()) {
-            //setPos(x(), y() + TILESIZE);
             yPos++;
+            updateAngle(Qt::Key_Down);
         }
 	}
+    prepareGeometryChange();
     updateCoords();
     //checkCollectable();
 }
