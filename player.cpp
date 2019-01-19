@@ -1,5 +1,4 @@
 #include "player.h"
-#include <iostream>
 
 Player::Player(Map *cMap, Map *map)
     : DynamicObject(DEFAULT_X, DEFAULT_Y, map),

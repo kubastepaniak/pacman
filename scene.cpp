@@ -3,6 +3,7 @@
 #include "scoreText.h"
 #include "point.h"
 #include "candy.h"
+#include "redGhost.h"
 
 Scene::Scene() {
     gameMap = new Map;
@@ -30,6 +31,8 @@ Scene::Scene() {
             score, &ScoreText::pointEaten);
     connect(player, &Player::itemCollected,
             this, &Scene::destroy);
+    
+    this->addItem(new RedGhost(gameMap));
 }
 
 void Scene::destroy() {
