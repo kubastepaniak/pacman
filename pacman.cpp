@@ -1,10 +1,7 @@
 #include <QApplication>
 #include <QGraphicsView>
 #include "scene.h"
-/* 
-#define FIXED_WIDTH 844
-#define FIXED_HEIGHT 964
- */
+
 #define FIXED_WIDTH 704
 #define FIXED_HEIGHT 804
 

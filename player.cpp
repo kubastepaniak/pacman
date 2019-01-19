@@ -1,4 +1,5 @@
 #include "player.h"
+#include <iostream>
 
 Player::Player(Map *cMap, Map *map)
     : DynamicObject(DEFAULT_X, DEFAULT_Y, map),
@@ -10,7 +11,7 @@ Player::Player(Map *cMap, Map *map)
     currentDirection = Direction::none;
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(updatePosition()));
-    timer->start(250); 
+    timer->start(200); 
 }
 
 void Player::paint(QPainter *painter, const QStyleOptionGraphicsItem * /*option*/, QWidget * /*widget*/) {
@@ -37,6 +38,7 @@ bool Player::moveUpPossible() {
     else
         return false;
 }
+
 bool Player::moveDownPossible() {
     if ((*gameMap)(xPos, yPos + 1) != MapTag::wall && 
         (*gameMap)(xPos, yPos + 1) != MapTag::gate)
@@ -64,7 +66,8 @@ bool Player::moveLeftPossible() {
 void Player::updateDirection(int direction) {
     switch(direction) {
         case Direction::right: {
-            if((*gameMap)(xPos, yPos) == MapTag::teleport) {
+            if((*gameMap)(xPos, yPos) == MapTag::teleport &&
+               xPos != TP_LEFT_X) {
                 xPos = TP_LEFT_X;
             } else {
                 xPos++;
@@ -73,7 +76,8 @@ void Player::updateDirection(int direction) {
             break;
         }
         case Direction::left: {
-            if((*gameMap)(xPos, yPos) == MapTag::teleport) {
+            if((*gameMap)(xPos, yPos) == MapTag::teleport &&
+               xPos != TP_RIGHT_X) {
                 xPos = TP_RIGHT_X;
             } else {
                 xPos--;
