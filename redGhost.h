@@ -29,6 +29,6 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
 public slots:
-    void go();
+    //void go();
     void updatePosition();
 };

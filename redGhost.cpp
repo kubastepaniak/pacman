@@ -1,5 +1,4 @@
 #include "redGhost.h"
-#include <iostream>
 
 RedGhost::RedGhost(Map *map, Player *target)
     : Ghost(default_x, default_y, map, target) {
@@ -106,19 +105,8 @@ void RedGhost::reset() {
     xPos = default_x;
     yPos = default_y;
 }
-
+/* 
 void RedGhost::go() {
     currentDirection = Direction::up;
     timer->start(STEP_RATE);
-}
-
-/* void RedGhost::changeState() {
-    if(state == State::init) {
-        //queuedDirection = Direction::right; // no clue why is this here
-        state = State::chase;
-    } else if(state == State::chase) {
-        state = State::avoid;
-    } else {
-        state = State::chase;
-    }
 } */

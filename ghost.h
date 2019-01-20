@@ -26,6 +26,7 @@ public:
 
 public slots:
     void changeState();
+    void go();
 
 signals:
     void playerCaught();

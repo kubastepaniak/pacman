@@ -90,3 +90,7 @@ void Ghost::changeState() {
         state = State::chase;
     }
 }
+
+void Ghost::go() {
+    timer->start(STEP_RATE);
+}

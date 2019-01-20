@@ -4,6 +4,7 @@
 #include "point.h"
 #include "candy.h"
 #include "redGhost.h"
+#include "greenGhost.h"
 
 Scene::Scene() {
     gameMap = new Map;
@@ -34,13 +35,12 @@ Scene::Scene() {
     
     //ghosts
     RedGhost *red = new RedGhost(gameMap, player);
+    connectGhost(red);
     this->addItem(red);
-    connect(player, &Player::start,
-            red, &RedGhost::go);
-    connect(player, &Player::changeGhostState,
-            red, &RedGhost::changeState);
-    connect(red, &RedGhost::playerCaught,
-            this, &Scene::gameOver);
+
+    GreenGhost *green = new GreenGhost(gameMap, player);
+    connectGhost(green);
+    this->addItem(green);
 }
 
 void Scene::destroy() {
@@ -63,4 +63,13 @@ void Scene::gameOver() {
     gameOverText->setFont(QFont(*gameOverTextFont));
     
     this->addItem(gameOverText);
+}
+
+void Scene::connectGhost(Ghost *spook) {
+    connect(player, &Player::start,
+            spook, &Ghost::go);
+    connect(player, &Player::changeGhostState,
+            spook, &Ghost::changeState);
+    connect(spook, &Ghost::playerCaught,
+            this, &Scene::gameOver);
 }
