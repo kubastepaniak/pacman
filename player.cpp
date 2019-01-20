@@ -111,12 +111,21 @@ void Player::keyPressEvent(QKeyEvent * event) {
 }
 
 void Player::move(int direction) {
+    static int counter = 0;
     if(moveInDirectionPossible(direction))
         updateDirection(direction);
 
     prepareGeometryChange();
     updateCoords();
     checkCollectable();
+    
+    if(direction) {
+        counter++;
+        if(counter == 4) {
+            emit fourStepsSingal();
+            counter = 0;
+        }
+    }
 }
 
 void Player::checkCollectable() {

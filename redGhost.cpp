@@ -1,8 +1,8 @@
 #include "redGhost.h"
 #include <iostream>
 
-RedGhost::RedGhost(Map *map)
-    : Ghost(default_x, default_y, map) {
+RedGhost::RedGhost(Map *map, Player *target)
+    : Ghost(default_x, default_y, map, target) {
     state = State::init;
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(updatePosition()));
@@ -63,13 +63,14 @@ void RedGhost::updateDirection(int direction) {
     }
 }
 
-void RedGhost::updatePosition(int direction) {
+void RedGhost::updatePosition() {
     switch(state) {
         case State::init: {
             move(currentDirection);
             break;
         }
         case State::chase: {
+            goWhere();
             if(moveInDirectionPossible(queuedDirection))
                 currentDirection = queuedDirection;
             move(currentDirection);
@@ -78,15 +79,63 @@ void RedGhost::updatePosition(int direction) {
     }
 }
 
-void RedGhost::startup() { 
-    int moves[3] = { Direction::up };
-    for(int step : moves) {
-        currentDirection = step;
+void RedGhost::goWhere() {
+    int targetX = player->xPos;
+    int targetY = player->yPos;
+    
+    if(targetX > xPos) { // pacman is on the right of the ghost
+        if(moveRightPossible()) {
+            queuedDirection = Direction::right;
+            return;
+        } else if (targetY > yPos) { // cant go right then go down if possible
+            if(moveDownPossible()) {
+                queuedDirection = Direction::down;
+                return;
+            }
+        } else if (targetY < yPos) { // or up
+            if(moveUpPossible()) {
+                queuedDirection = Direction::up;
+                return;
+            }
+        }
+    } else if(targetX < xPos) { // pacman is on the left of the ghost
+        if(moveLeftPossible()) {
+            queuedDirection = Direction::left;
+            return;
+        } else if (targetY > yPos) { // cant go left then go down if possible
+            if(moveDownPossible()) {
+                queuedDirection = Direction::down;
+                return;
+            }
+        } else if (targetY < yPos) { // or up
+            if(moveUpPossible()) {
+                queuedDirection = Direction::up;
+                return;
+            }
+        }
+    } else {
+        if(targetY > yPos) { // pacman is below
+            if(moveDownPossible()) {
+                queuedDirection = Direction::down;
+                return;
+            }
+        } else if(targetY < yPos) { // pacman is above
+            if(moveUpPossible()) {
+                queuedDirection = Direction::up;
+                return;
+            }
+        } else {
+            std::cout << "got 'em\n";
+        }
     }
 }
 
 void RedGhost::go() {
-    //startup();
     currentDirection = Direction::up;
     timer->start(STEP_RATE);
+}
+
+void RedGhost::toChase() {
+    queuedDirection = Direction::right;
+    state = State::chase;
 }

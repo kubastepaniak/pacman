@@ -1,10 +1,13 @@
 #pragma once
 #include "sources/dynamicObject.h"
+#include "player.h"
 
 class Ghost : public DynamicObject {
     Q_OBJECT
 
 protected:
+    Player *player;
+
     int xCoordinate;
     int yCoordinate;
 
@@ -17,5 +20,5 @@ protected:
     bool moveRightPossible() override;
 
 public:
-    Ghost(int x, int y, Map *map);
+    Ghost(int x, int y, Map *map, Player *target);
 };

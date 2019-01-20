@@ -6,8 +6,6 @@
 class DynamicObject : public GameObject {
     Q_OBJECT
 protected:
-    int xPos;
-    int yPos;
     QTimer *timer;
 
     enum Direction { none = 0, right = Qt::Key_Right, left = Qt::Key_Left, up = Qt::Key_Up, down = Qt::Key_Down};
@@ -34,5 +32,7 @@ protected:
         return false;
     }
 public:
+    int xPos;
+    int yPos;
     DynamicObject(int x, int y, Map *map = nullptr) :  GameObject(map), xPos(x), yPos(y) { }
 };

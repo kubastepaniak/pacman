@@ -46,4 +46,5 @@ public slots:
 signals:
     void itemCollected(int value);
     void start();
+    void fourStepsSingal();
 };

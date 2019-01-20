@@ -20,7 +20,7 @@
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_RedGhost_t {
     QByteArrayData data[5];
-    char stringdata0[38];
+    char stringdata0[36];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -32,11 +32,11 @@ static const qt_meta_stringdata_RedGhost_t qt_meta_stringdata_RedGhost = {
 QT_MOC_LITERAL(0, 0, 8), // "RedGhost"
 QT_MOC_LITERAL(1, 9, 2), // "go"
 QT_MOC_LITERAL(2, 12, 0), // ""
-QT_MOC_LITERAL(3, 13, 14), // "updatePosition"
-QT_MOC_LITERAL(4, 28, 9) // "direction"
+QT_MOC_LITERAL(3, 13, 7), // "toChase"
+QT_MOC_LITERAL(4, 21, 14) // "updatePosition"
 
     },
-    "RedGhost\0go\0\0updatePosition\0direction"
+    "RedGhost\0go\0\0toChase\0updatePosition"
 };
 #undef QT_MOC_LITERAL
 
@@ -55,12 +55,12 @@ static const uint qt_meta_data_RedGhost[] = {
 
  // slots: name, argc, parameters, tag, flags
        1,    0,   29,    2, 0x0a /* Public */,
-       3,    1,   30,    2, 0x0a /* Public */,
-       3,    0,   33,    2, 0x2a /* Public | MethodCloned */,
+       3,    0,   30,    2, 0x0a /* Public */,
+       4,    0,   31,    2, 0x0a /* Public */,
 
  // slots: parameters
     QMetaType::Void,
-    QMetaType::Void, QMetaType::Int,    4,
+    QMetaType::Void,
     QMetaType::Void,
 
        0        // eod
@@ -73,11 +73,12 @@ void RedGhost::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->go(); break;
-        case 1: _t->updatePosition((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 1: _t->toChase(); break;
         case 2: _t->updatePosition(); break;
         default: ;
         }
     }
+    Q_UNUSED(_a);
 }
 
 const QMetaObject RedGhost::staticMetaObject = {
