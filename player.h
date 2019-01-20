@@ -27,10 +27,12 @@ private:
     int startAngle = 0;
     int currentDirection;
     int queuedDirection;
+    bool isBuffed = false;
 
     void updateDirection(int direction);
     void updateCoords();
     void checkCollectable();
+    void buffUp();
 
 public:
     int xCoordinate;
@@ -42,9 +44,10 @@ public:
     
 public slots:
     void updatePosition();
+    void buffFading();
 
 signals:
     void itemCollected(int value);
     void start();
-    void fourStepsSingal();
+    void changeGhostState();
 };

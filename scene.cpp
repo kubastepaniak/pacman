@@ -37,12 +37,30 @@ Scene::Scene() {
     this->addItem(red);
     connect(player, &Player::start,
             red, &RedGhost::go);
-    connect(player, &Player::fourStepsSingal,
-            red, &RedGhost::toChase);
+    connect(player, &Player::changeGhostState,
+            red, &RedGhost::changeState);
+    connect(red, &RedGhost::playerCaught,
+            this, &Scene::gameOver);
 }
 
 void Scene::destroy() {
     Point *temp = (Point*)items(player->boundingRect()).at(1) ;
     removeItem(temp);
     delete temp;
+}
+
+void Scene::gameOver() {
+    player->timer->stop();
+
+    QFont *gameOverTextFont = new QFont;
+    gameOverTextFont->setBold(true);
+    gameOverTextFont->setItalic(true);
+    gameOverTextFont->setWeight(20);
+
+    QGraphicsTextItem *gameOverText = new QGraphicsTextItem("Game Over");
+    gameOverText->setPos(315, 425);
+    gameOverText->setDefaultTextColor(Qt::white);
+    gameOverText->setFont(QFont(*gameOverTextFont));
+    
+    this->addItem(gameOverText);
 }

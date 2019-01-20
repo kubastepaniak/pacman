@@ -14,8 +14,11 @@ Player::Player(Map *cMap, Map *map)
 }
 
 void Player::paint(QPainter *painter, const QStyleOptionGraphicsItem * /*option*/, QWidget * /*widget*/) {
+    if(isBuffed)
+        painter->setBrush(Qt::red);
+    else
+        painter->setBrush(Qt::yellow);
     painter->setPen(Qt::NoPen);
-    painter->setBrush(Qt::yellow);
     painter->drawPie(xCoordinate, yCoordinate, TILESIZE, TILESIZE,
                      16 * (angle / 2) + startAngle, 16 * (360 - angle));
 }
@@ -119,11 +122,11 @@ void Player::move(int direction) {
     updateCoords();
     checkCollectable();
     
-    if(direction) {
+    if(direction || counter == 0) {
         counter++;
-        if(counter == 4) {
-            emit fourStepsSingal();
-            counter = 0;
+        if(counter == 5) {
+            emit changeGhostState();
+            //counter = 0;
         }
     }
 }
@@ -135,6 +138,31 @@ void Player::checkCollectable() {
     } else if((*collectablesMap)(xPos, yPos) == CollTag::candy) {
         (*collectablesMap)(xPos, yPos) = 0;
         emit itemCollected(CollTag::candy);
+        buffUp();
+    }
+}
+
+void Player::buffUp() {
+    isBuffed = true;
+    emit changeGhostState();
+
+    QTimer *buffEnd = new QTimer(this);
+    connect(buffEnd, SIGNAL(timeout()), this, SLOT(buffFading()));
+    buffEnd->setSingleShot(true);
+    
+    QTimer *chaseStart = new QTimer(this);
+    connect(chaseStart, SIGNAL(timeout()), this, SLOT(buffFading()));
+    chaseStart->setSingleShot(true);
+    
+    buffEnd->start(5 * STEP_RATE * 5);
+    chaseStart->start(5 * STEP_RATE * 6);
+}
+
+void Player::buffFading() {
+    if(isBuffed) {
+        isBuffed = false;
+    } else {
+        emit changeGhostState();
     }
 }
 

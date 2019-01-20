@@ -21,4 +21,7 @@ protected:
 
 public:
     Ghost(int x, int y, Map *map, Player *target);
+
+signals:
+    void playerCaught();
 };

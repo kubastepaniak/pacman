@@ -8,8 +8,11 @@ private:
     Map *gameMap;
     Map *collectablesMap;
     Player *player;
+
 public:
     Scene();
+
 public slots:
     void destroy();
+    void gameOver();
 };

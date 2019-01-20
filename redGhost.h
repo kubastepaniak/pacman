@@ -34,6 +34,6 @@ public:
 
 public slots:
     void go();
-    void toChase();
+    void changeState();
     void updatePosition();
 };
