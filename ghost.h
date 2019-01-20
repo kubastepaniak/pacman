@@ -8,9 +8,6 @@ class Ghost : public DynamicObject {
 protected:
     Player *player;
 
-    int xCoordinate;
-    int yCoordinate;
-
     enum State { init, chase, avoid };
     int state;
     
@@ -18,9 +15,17 @@ protected:
     bool moveDownPossible() override;
     bool moveLeftPossible() override;
     bool moveRightPossible() override;
+    void move(int direction) override;
 
+    virtual void goWhere() = 0;
+
+    void updateDirection(int direction);
+    
 public:
     Ghost(int x, int y, Map *map, Player *target);
+
+public slots:
+    void changeState();
 
 signals:
     void playerCaught();

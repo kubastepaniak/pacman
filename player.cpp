@@ -1,9 +1,7 @@
 #include "player.h"
 
 Player::Player(Map *cMap, Map *map)
-    : DynamicObject(DEFAULT_X, DEFAULT_Y, map),
-      xCoordinate(DEFAULT_X * TILESIZE),
-      yCoordinate(DEFAULT_Y * TILESIZE) { 
+    : DynamicObject(DEFAULT_X, DEFAULT_Y, map) { 
     collectablesMap = cMap;
     this->setFlag(QGraphicsItem::ItemIsFocusable);
 
@@ -21,10 +19,6 @@ void Player::paint(QPainter *painter, const QStyleOptionGraphicsItem * /*option*
     painter->setPen(Qt::NoPen);
     painter->drawPie(xCoordinate, yCoordinate, TILESIZE, TILESIZE,
                      16 * (angle / 2) + startAngle, 16 * (360 - angle));
-}
-
-QRectF Player::boundingRect() const {
-    return QRectF(xCoordinate, yCoordinate, TILESIZE, TILESIZE);
 }
 
 void Player::updatePosition() {
@@ -164,9 +158,4 @@ void Player::buffFading() {
     } else {
         emit changeGhostState();
     }
-}
-
-void Player::updateCoords() {
-    xCoordinate = xPos * TILESIZE;
-    yCoordinate = yPos * TILESIZE;
 }

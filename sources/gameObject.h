@@ -1,9 +1,12 @@
 #pragma once
 #include <QGraphicsObject>
-#include "gameLogicObject.h"
+#include "map.h"
 
-class GameObject : public QGraphicsObject, public GameLogicObject {
+#define TILESIZE 25
+
+class GameObject : public QGraphicsObject {
     Q_OBJECT
 public:
-    GameObject(Map* map = nullptr) : GameLogicObject(map) { };
+    Map *gameMap;
+    GameObject(Map* map = nullptr) { this->gameMap = map; }
 };

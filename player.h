@@ -25,21 +25,15 @@ private:
                        up = 90 * 16, down = -(90 * 16) };
     const static int angle = 60;
     int startAngle = 0;
-    int currentDirection;
-    int queuedDirection;
     bool isBuffed = false;
 
     void updateDirection(int direction);
-    void updateCoords();
     void checkCollectable();
     void buffUp();
 
 public:
-    int xCoordinate;
-    int yCoordinate;
     Player(Map *cMap = nullptr, Map *map = nullptr);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
-    QRectF boundingRect() const override;
     void keyPressEvent(QKeyEvent * event);
     
 public slots:

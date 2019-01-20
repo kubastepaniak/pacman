@@ -14,58 +14,6 @@ void RedGhost::paint(QPainter *painter, const QStyleOptionGraphicsItem * /*optio
     painter->drawPixmap(xCoordinate, yCoordinate, QPixmap(QString("sources/red.png")));
 }
 
-QRectF RedGhost::boundingRect() const {
-    return QRectF(xCoordinate, yCoordinate, TILESIZE, TILESIZE);
-}
-
-void RedGhost::move(int direction) {
-    if(player->xPos == this->xPos && player->yPos == this->yPos)
-        emit playerCaught();
-
-    if(moveInDirectionPossible(direction))
-        updateDirection(direction);
-
-    prepareGeometryChange();
-    updateCoords();
-}
-
-void RedGhost::updateCoords() {
-    xCoordinate = xPos * TILESIZE;
-    yCoordinate = yPos * TILESIZE;
-}
-// functions in between could be methods of dynamic object
-void RedGhost::updateDirection(int direction) {
-    switch(direction) {
-        case Direction::right: {
-            if((*gameMap)(xPos, yPos) == MapTag::teleport &&
-               xPos != TP_LEFT_X) {
-                xPos = TP_LEFT_X;
-            } else {
-                xPos++;
-            }
-            break;
-        }
-        case Direction::left: {
-            if((*gameMap)(xPos, yPos) == MapTag::teleport &&
-               xPos != TP_RIGHT_X) {
-                xPos = TP_RIGHT_X;
-            } else {
-                xPos--;
-            }
-            break;
-        }
-        case Direction::up: {
-            yPos--;
-            break;
-        }
-        case Direction::down: {
-            yPos++;
-            break;
-        }
-        default: break;
-    }
-}
-
 void RedGhost::updatePosition() {
     switch(state) {
         case State::init: {
@@ -164,8 +112,7 @@ void RedGhost::go() {
     timer->start(STEP_RATE);
 }
 
-void RedGhost::changeState() {
-    std::cout << state << " -> ";
+/* void RedGhost::changeState() {
     if(state == State::init) {
         //queuedDirection = Direction::right; // no clue why is this here
         state = State::chase;
@@ -174,5 +121,4 @@ void RedGhost::changeState() {
     } else {
         state = State::chase;
     }
-    std::cout << state << "\n";
-}
+} */

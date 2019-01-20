@@ -57,7 +57,8 @@ SOURCES       = candy.cpp \
 		rect.cpp \
 		redGhost.cpp \
 		scene.cpp \
-		scoreText.cpp moc_candy.cpp \
+		scoreText.cpp \
+		sources/dynamicObject.cpp moc_candy.cpp \
 		moc_ghost.cpp \
 		moc_player.cpp \
 		moc_point.cpp \
@@ -78,6 +79,7 @@ OBJECTS       = candy.o \
 		redGhost.o \
 		scene.o \
 		scoreText.o \
+		dynamicObject.o \
 		moc_candy.o \
 		moc_ghost.o \
 		moc_player.o \
@@ -157,7 +159,6 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		scoreText.h \
 		sources/collectable.h \
 		sources/dynamicObject.h \
-		sources/gameLogicObject.h \
 		sources/gameObject.h \
 		sources/staticObject.h candy.cpp \
 		ghost.cpp \
@@ -168,7 +169,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		rect.cpp \
 		redGhost.cpp \
 		scene.cpp \
-		scoreText.cpp
+		scoreText.cpp \
+		sources/dynamicObject.cpp
 QMAKE_TARGET  = pacman
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = pacman
@@ -336,8 +338,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents candy.h ghost.h map.h player.h point.h rect.h redGhost.h scene.h scoreText.h sources/collectable.h sources/dynamicObject.h sources/gameLogicObject.h sources/gameObject.h sources/staticObject.h $(DISTDIR)/
-	$(COPY_FILE) --parents candy.cpp ghost.cpp map.cpp pacman.cpp player.cpp point.cpp rect.cpp redGhost.cpp scene.cpp scoreText.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents candy.h ghost.h map.h player.h point.h rect.h redGhost.h scene.h scoreText.h sources/collectable.h sources/dynamicObject.h sources/gameObject.h sources/staticObject.h $(DISTDIR)/
+	$(COPY_FILE) --parents candy.cpp ghost.cpp map.cpp pacman.cpp player.cpp point.cpp rect.cpp redGhost.cpp scene.cpp scoreText.cpp sources/dynamicObject.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -366,21 +368,19 @@ compiler_moc_header_clean:
 moc_candy.cpp: sources/collectable.h \
 		sources/staticObject.h \
 		sources/gameObject.h \
-		sources/gameLogicObject.h \
 		map.h \
 		candy.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/feyron/Desktop/oopc/qt/pacman -I/home/feyron/Desktop/oopc/qt/pacman -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include candy.h -o moc_candy.cpp
 
 moc_ghost.cpp: sources/dynamicObject.h \
 		sources/gameObject.h \
-		sources/gameLogicObject.h \
 		map.h \
+		player.h \
 		ghost.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/feyron/Desktop/oopc/qt/pacman -I/home/feyron/Desktop/oopc/qt/pacman -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ghost.h -o moc_ghost.cpp
 
 moc_player.cpp: sources/dynamicObject.h \
 		sources/gameObject.h \
-		sources/gameLogicObject.h \
 		map.h \
 		player.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/feyron/Desktop/oopc/qt/pacman -I/home/feyron/Desktop/oopc/qt/pacman -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include player.h -o moc_player.cpp
@@ -388,14 +388,12 @@ moc_player.cpp: sources/dynamicObject.h \
 moc_point.cpp: sources/collectable.h \
 		sources/staticObject.h \
 		sources/gameObject.h \
-		sources/gameLogicObject.h \
 		map.h \
 		point.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/feyron/Desktop/oopc/qt/pacman -I/home/feyron/Desktop/oopc/qt/pacman -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include point.h -o moc_point.cpp
 
 moc_rect.cpp: sources/staticObject.h \
 		sources/gameObject.h \
-		sources/gameLogicObject.h \
 		map.h \
 		rect.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/feyron/Desktop/oopc/qt/pacman -I/home/feyron/Desktop/oopc/qt/pacman -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include rect.h -o moc_rect.cpp
@@ -403,8 +401,8 @@ moc_rect.cpp: sources/staticObject.h \
 moc_redGhost.cpp: ghost.h \
 		sources/dynamicObject.h \
 		sources/gameObject.h \
-		sources/gameLogicObject.h \
 		map.h \
+		player.h \
 		redGhost.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/feyron/Desktop/oopc/qt/pacman -I/home/feyron/Desktop/oopc/qt/pacman -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include redGhost.h -o moc_redGhost.cpp
 
@@ -413,24 +411,20 @@ moc_scoreText.cpp: scoreText.h
 
 moc_collectable.cpp: sources/staticObject.h \
 		sources/gameObject.h \
-		sources/gameLogicObject.h \
 		map.h \
 		sources/collectable.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/feyron/Desktop/oopc/qt/pacman -I/home/feyron/Desktop/oopc/qt/pacman -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include sources/collectable.h -o moc_collectable.cpp
 
 moc_dynamicObject.cpp: sources/gameObject.h \
-		sources/gameLogicObject.h \
 		map.h \
 		sources/dynamicObject.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/feyron/Desktop/oopc/qt/pacman -I/home/feyron/Desktop/oopc/qt/pacman -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include sources/dynamicObject.h -o moc_dynamicObject.cpp
 
-moc_gameObject.cpp: sources/gameLogicObject.h \
-		map.h \
+moc_gameObject.cpp: map.h \
 		sources/gameObject.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/feyron/Desktop/oopc/qt/pacman -I/home/feyron/Desktop/oopc/qt/pacman -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include sources/gameObject.h -o moc_gameObject.cpp
 
 moc_staticObject.cpp: sources/gameObject.h \
-		sources/gameLogicObject.h \
 		map.h \
 		sources/staticObject.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/feyron/Desktop/oopc/qt/pacman -I/home/feyron/Desktop/oopc/qt/pacman -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include sources/staticObject.h -o moc_staticObject.cpp
@@ -453,15 +447,14 @@ candy.o: candy.cpp candy.h \
 		sources/collectable.h \
 		sources/staticObject.h \
 		sources/gameObject.h \
-		sources/gameLogicObject.h \
 		map.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o candy.o candy.cpp
 
 ghost.o: ghost.cpp ghost.h \
 		sources/dynamicObject.h \
 		sources/gameObject.h \
-		sources/gameLogicObject.h \
-		map.h
+		map.h \
+		player.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ghost.o ghost.cpp
 
 map.o: map.cpp map.h
@@ -471,14 +464,12 @@ pacman.o: pacman.cpp scene.h \
 		map.h \
 		player.h \
 		sources/dynamicObject.h \
-		sources/gameObject.h \
-		sources/gameLogicObject.h
+		sources/gameObject.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o pacman.o pacman.cpp
 
 player.o: player.cpp player.h \
 		sources/dynamicObject.h \
 		sources/gameObject.h \
-		sources/gameLogicObject.h \
 		map.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o player.o player.cpp
 
@@ -486,14 +477,12 @@ point.o: point.cpp point.h \
 		sources/collectable.h \
 		sources/staticObject.h \
 		sources/gameObject.h \
-		sources/gameLogicObject.h \
 		map.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o point.o point.cpp
 
 rect.o: rect.cpp rect.h \
 		sources/staticObject.h \
 		sources/gameObject.h \
-		sources/gameLogicObject.h \
 		map.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o rect.o rect.cpp
 
@@ -501,14 +490,13 @@ redGhost.o: redGhost.cpp redGhost.h \
 		ghost.h \
 		sources/dynamicObject.h \
 		sources/gameObject.h \
-		sources/gameLogicObject.h \
-		map.h
+		map.h \
+		player.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o redGhost.o redGhost.cpp
 
 scene.o: scene.cpp rect.h \
 		sources/staticObject.h \
 		sources/gameObject.h \
-		sources/gameLogicObject.h \
 		map.h \
 		scene.h \
 		player.h \
@@ -516,11 +504,18 @@ scene.o: scene.cpp rect.h \
 		scoreText.h \
 		point.h \
 		sources/collectable.h \
-		candy.h
+		candy.h \
+		redGhost.h \
+		ghost.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o scene.o scene.cpp
 
 scoreText.o: scoreText.cpp scoreText.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o scoreText.o scoreText.cpp
+
+dynamicObject.o: sources/dynamicObject.cpp sources/dynamicObject.h \
+		sources/gameObject.h \
+		map.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o dynamicObject.o sources/dynamicObject.cpp
 
 moc_candy.o: moc_candy.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_candy.o moc_candy.cpp
