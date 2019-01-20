@@ -112,7 +112,7 @@ void RedGhost::goWhere() {
                 if(moveDownPossible())// run down
                     queuedDirection = Direction::down;
             } else {
-                emit playerCaught();
+                reset();
             }
         }
     } else {
@@ -150,12 +150,21 @@ void RedGhost::goWhere() {
     }
 }
 
+void RedGhost::reset() {
+    state = State::init;
+    currentDirection = Direction::up;
+    xPos = default_x;
+    yPos = default_y;
+}
+
 void RedGhost::go() {
+    std::cout << "go";
     currentDirection = Direction::up;
     timer->start(STEP_RATE);
 }
 
 void RedGhost::changeState() {
+    std::cout << state << " -> ";
     if(state == State::init) {
         queuedDirection = Direction::right;
         state = State::chase;
@@ -164,4 +173,5 @@ void RedGhost::changeState() {
     } else {
         state = State::chase;
     }
+    std::cout << state << "\n";
 }

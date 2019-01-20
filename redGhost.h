@@ -19,13 +19,14 @@ protected:
     void move(int direction) override;
 
 private:
-    static const int default_x = 13;
+    static const int default_x = 14;
     static const int default_y = 15;
     int currentDirection;
     int queuedDirection;
     void updateDirection(int direction);
     void updateCoords();
     void goWhere();
+    void reset();
 
 public:
     RedGhost(Map *map, Player *target);
