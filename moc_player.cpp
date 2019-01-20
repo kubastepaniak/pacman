@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_Player_t {
-    QByteArrayData data[5];
-    char stringdata0[43];
+    QByteArrayData data[6];
+    char stringdata0[49];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -33,10 +33,12 @@ QT_MOC_LITERAL(0, 0, 6), // "Player"
 QT_MOC_LITERAL(1, 7, 13), // "itemCollected"
 QT_MOC_LITERAL(2, 21, 0), // ""
 QT_MOC_LITERAL(3, 22, 5), // "value"
-QT_MOC_LITERAL(4, 28, 14) // "updatePosition"
+QT_MOC_LITERAL(4, 28, 5), // "start"
+QT_MOC_LITERAL(5, 34, 14) // "updatePosition"
 
     },
-    "Player\0itemCollected\0\0value\0updatePosition"
+    "Player\0itemCollected\0\0value\0start\0"
+    "updatePosition"
 };
 #undef QT_MOC_LITERAL
 
@@ -46,21 +48,23 @@ static const uint qt_meta_data_Player[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       2,   14, // methods
+       3,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       1,       // signalCount
+       2,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,   24,    2, 0x06 /* Public */,
+       1,    1,   29,    2, 0x06 /* Public */,
+       4,    0,   32,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       4,    0,   27,    2, 0x0a /* Public */,
+       5,    0,   33,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::Int,    3,
+    QMetaType::Void,
 
  // slots: parameters
     QMetaType::Void,
@@ -75,7 +79,8 @@ void Player::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->itemCollected((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 1: _t->updatePosition(); break;
+        case 1: _t->start(); break;
+        case 2: _t->updatePosition(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -85,6 +90,12 @@ void Player::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
             typedef void (Player::*_t)(int );
             if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&Player::itemCollected)) {
                 *result = 0;
+            }
+        }
+        {
+            typedef void (Player::*_t)();
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&Player::start)) {
+                *result = 1;
             }
         }
     }
@@ -115,13 +126,13 @@ int Player::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 2)
+        if (_id < 3)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 2;
+        _id -= 3;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 2)
+        if (_id < 3)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 2;
+        _id -= 3;
     }
     return _id;
 }
@@ -131,5 +142,11 @@ void Player::itemCollected(int _t1)
 {
     void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
+}
+
+// SIGNAL 1
+void Player::start()
+{
+    QMetaObject::activate(this, &staticMetaObject, 1, Q_NULLPTR);
 }
 QT_END_MOC_NAMESPACE

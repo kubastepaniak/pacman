@@ -32,7 +32,11 @@ Scene::Scene() {
     connect(player, &Player::itemCollected,
             this, &Scene::destroy);
     
-    this->addItem(new RedGhost(gameMap));
+    //ghosts
+    RedGhost *red = new RedGhost(gameMap);
+    this->addItem(red);
+    connect(player, &Player::start,
+            red, &RedGhost::go);
 }
 
 void Scene::destroy() {

@@ -1,11 +1,15 @@
 #pragma once
 #include "gameObject.h"
 
+#define STEP_RATE 200
+
 class DynamicObject : public GameObject {
     Q_OBJECT
 protected:
     int xPos;
     int yPos;
+    QTimer *timer;
+
     enum Direction { none = 0, right = Qt::Key_Right, left = Qt::Key_Left, up = Qt::Key_Up, down = Qt::Key_Down};
     virtual bool moveUpPossible() = 0;
     virtual bool moveDownPossible() = 0;

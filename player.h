@@ -20,7 +20,6 @@ protected:
     void move(int direction) override;
 
 private:
-    QTimer *timer;
     Map *collectablesMap;
     enum DirectAngle { right = 0, left = 180 * 16, 
                        up = 90 * 16, down = -(90 * 16) };
@@ -46,4 +45,5 @@ public slots:
 
 signals:
     void itemCollected(int value);
+    void start();
 };

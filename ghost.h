@@ -7,6 +7,9 @@ class Ghost : public DynamicObject {
 protected:
     int xCoordinate;
     int yCoordinate;
+
+    enum State { init, chase, avoid };
+    int state;
     
     bool moveUpPossible() override;
     bool moveDownPossible() override;

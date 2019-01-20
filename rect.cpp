@@ -8,7 +8,7 @@ Rect::Rect(int xindex, int yindex, Map *map)
         case MapTag::space:     fill = Qt::black;       break;
         case MapTag::wall:      fill = Qt::blue;        break;
         case MapTag::gate:      fill = Qt::darkBlue;    break;
-        case MapTag::teleport:  fill = Qt::darkYellow;  break;
+        case MapTag::teleport:  fill = Qt::black;  break;
         default:                fill = Qt::green;       break;
     }
 }

@@ -1,5 +1,4 @@
 #include "player.h"
-#include <iostream>
 
 Player::Player(Map *cMap, Map *map)
     : DynamicObject(DEFAULT_X, DEFAULT_Y, map),
@@ -11,7 +10,7 @@ Player::Player(Map *cMap, Map *map)
     currentDirection = Direction::none;
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(updatePosition()));
-    timer->start(200); 
+    timer->start(STEP_RATE); 
 }
 
 void Player::paint(QPainter *painter, const QStyleOptionGraphicsItem * /*option*/, QWidget * /*widget*/) {
@@ -102,8 +101,10 @@ void Player::updateDirection(int direction) {
 void Player::keyPressEvent(QKeyEvent * event) {
     if (event->key() == Qt::Key_Right || event->key() == Qt::Key_Left ||
         event->key() == Qt::Key_Down  || event->key() == Qt::Key_Up) {
-        if(currentDirection == Direction::none)
+        if(currentDirection == Direction::none) {
+            emit start();
             currentDirection = event->key();
+        }
         else
             queuedDirection = event->key();
     }
