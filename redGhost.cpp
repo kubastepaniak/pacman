@@ -19,6 +19,9 @@ QRectF RedGhost::boundingRect() const {
 }
 
 void RedGhost::move(int direction) {
+    if(player->xPos == this->xPos && player->yPos == this->yPos)
+        emit playerCaught();
+
     if(moveInDirectionPossible(direction))
         updateDirection(direction);
 
@@ -66,7 +69,8 @@ void RedGhost::updateDirection(int direction) {
 void RedGhost::updatePosition() {
     switch(state) {
         case State::init: {
-            move(currentDirection);
+            //move(currentDirection);
+            move(Direction::up);
             break;
         }
         case State::chase: case State::avoid: {
@@ -143,8 +147,6 @@ void RedGhost::goWhere() {
             } else if(targetY < yPos) { // pacman is above
                 if(moveUpPossible())
                     queuedDirection = Direction::up;
-            } else {
-                emit playerCaught();
             }
         }
     }
@@ -158,7 +160,6 @@ void RedGhost::reset() {
 }
 
 void RedGhost::go() {
-    std::cout << "go";
     currentDirection = Direction::up;
     timer->start(STEP_RATE);
 }
@@ -166,7 +167,7 @@ void RedGhost::go() {
 void RedGhost::changeState() {
     std::cout << state << " -> ";
     if(state == State::init) {
-        queuedDirection = Direction::right;
+        //queuedDirection = Direction::right; // no clue why is this here
         state = State::chase;
     } else if(state == State::chase) {
         state = State::avoid;
