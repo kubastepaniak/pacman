@@ -105,8 +105,3 @@ void RedGhost::reset() {
     xPos = default_x;
     yPos = default_y;
 }
-/* 
-void RedGhost::go() {
-    currentDirection = Direction::up;
-    timer->start(STEP_RATE);
-} */
